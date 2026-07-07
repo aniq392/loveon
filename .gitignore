@@ -1,0 +1,29 @@
+# .gitignore
+*.iml
+.gradle
+/local.properties
+/.idea/caches
+/.idea/libraries
+/.idea/modules.xml
+/.idea/workspace.xml
+/.idea/navEditor.xml
+/.idea/assetWizardSettings.xml
+.DS_Store
+# Android build
+/build
+**/build/
+
+/captures
+.externalNativeBuild
+.cxx
+local.properties
+
+# Local
+
+# IDE
+
+# Secrets
+*.jks
+*.keystore
+google-services.json
+.env
