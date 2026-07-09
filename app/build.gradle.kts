@@ -57,4 +57,8 @@ dependencies {
     debugImplementation(libs.androidx.compose.ui.test.manifest)
     implementation("androidx.navigation:navigation-compose:2.8.5") // 2026년 현재 안정 버전 기준
     implementation("androidx.compose.material:material-icons-extended:1.7.0")
+    implementation("com.squareup.retrofit2:retrofit:2.11.0") // Retrofit 라이브러리 추가
+    implementation("com.squareup.retrofit2:converter-gson:2.11.0") // JSON 변환을 위한 Gson 컨버터 (필수)
+    implementation("com.google.dagger:hilt-android:2.51.1") // Hilt (의존성 주입을 위한 핵심 라이브러리)
+
 }
