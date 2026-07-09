@@ -20,6 +20,9 @@ sealed class BottomBarScreen(
     object Profile : BottomBarScreen("profile", "Profile", Icons.Filled.Person)
 
     companion object {
-        val items = listOf(Home, Community, Create, Notifications, Profile)
+        // by lazy를 사용하여 초기화 시점을 뒤로 미룹니다.
+        val items by lazy {
+            listOf(Home, Community, Create, Notifications, Profile)
+        }
     }
 }
