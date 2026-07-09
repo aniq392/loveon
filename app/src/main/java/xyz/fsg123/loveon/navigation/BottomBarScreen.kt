@@ -23,5 +23,9 @@ sealed class BottomBarScreen(
 
     companion object {
         val items = listOf(Home, Community, Create, Notifications, Profile)
+
+        fun getTitleResForRoute(route: String): Int {
+            return items.firstOrNull { it.route == route }?.titleRes ?: R.string.app_name
+        }
     }
 }
