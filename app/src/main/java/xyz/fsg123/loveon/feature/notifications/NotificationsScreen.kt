@@ -1,4 +1,4 @@
-package xyz.fsg123.loveon.feature.home
+package xyz.fsg123.loveon.feature.notifications
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,13 +10,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 
 @Composable
-fun HomeScreen() {
+fun NotificationsScreen() {
     Box(
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "Welcome to LoveOn Home screen! This is a centered sample text.",
+            text = "Your notifications will appear here in the future.",
             fontSize = 20.sp,
             textAlign = TextAlign.Center
         )
