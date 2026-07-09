@@ -19,6 +19,11 @@ dependencyResolutionManagement {
     repositories {
         google()
         mavenCentral()
+
+        // 💛 카카오 SDK 다운로드를 위한 전용 레포지토리 주소 추가
+        maven {
+            url = java.net.URI("https://devrepo.kakao.com/nexus/content/groups/public/")
+        }
     }
 }
 
