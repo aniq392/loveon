@@ -7,4 +7,5 @@
     <string name="profile">Profile</string>
     <string name="splash_text">This is the splash screen. Navigate to login in 2 seconds.</string>
     <string name="login_text">This is the login screen. Tap to continue.</string>
+    <string name="go_to_main_app">Go to Main App</string>
 </resources>

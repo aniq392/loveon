@@ -12,12 +12,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavDestination
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import xyz.fsg123.loveon.R
 import xyz.fsg123.loveon.feature.community.CommunityScreen
 import xyz.fsg123.loveon.feature.create.CreateScreen
 import xyz.fsg123.loveon.feature.home.HomeScreen
@@ -36,7 +38,11 @@ fun MainAppScreen() {
         topBar = {
             TopAppBar(
                 title = {
-                    Text(text = currentRoute.replaceFirstChar { it.uppercase() })
+                    Text(
+                        text = stringResource(
+                            id = BottomBarScreen.getTitleResForRoute(currentRoute)
+                        )
+                    )
                 }
             )
         },
@@ -54,8 +60,13 @@ fun MainAppScreen() {
                                 restoreState = true
                             }
                         },
-                        icon = { androidx.compose.material3.Icon(imageVector = screen.icon, contentDescription = screen.title) },
-                        label = { Text(text = screen.title) }
+                        icon = {
+                            androidx.compose.material3.Icon(
+                                imageVector = screen.icon,
+                                contentDescription = stringResource(id = screen.titleRes)
+                            )
+                        },
+                        label = { Text(text = stringResource(id = screen.titleRes)) }
                     )
                 }
             }
