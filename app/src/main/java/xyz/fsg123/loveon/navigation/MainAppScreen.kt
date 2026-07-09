@@ -1,7 +1,9 @@
 package xyz.fsg123.loveon.navigation
 
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.padding // 패딩 추가
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -9,10 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavDestination
+import androidx.navigation.NavDestination.Companion.hierarchy // hierarchy 추가
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -31,7 +32,7 @@ fun MainAppScreen() {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
-    val currentRoute = currentDestination?.route ?: BottomBarScreen.Home.route
+    val currentRoute = currentDestination?.route
 
     Scaffold(
         topBar = {
@@ -39,6 +40,7 @@ fun MainAppScreen() {
                 title = {
                     Text(
                         text = stringResource(
+                            // 널 안전성을 위해 currentRoute가 null일 때 대처 추가
                             id = BottomBarScreen.getTitleResForRoute(currentRoute)
                         )
                     )
@@ -47,9 +49,12 @@ fun MainAppScreen() {
         },
         bottomBar = {
             NavigationBar {
+                // 이전 답변대로 BottomBarScreen에 'by lazy'를 적용했다면 호출 시점에 안전하게 가져옴
                 BottomBarScreen.items.forEach { screen ->
+                    val isSelected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
+
                     NavigationBarItem(
-                        selected = currentRoute == screen.route,
+                        selected = isSelected,
                         onClick = {
                             navController.navigate(screen.route) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -60,7 +65,7 @@ fun MainAppScreen() {
                             }
                         },
                         icon = {
-                            androidx.compose.material3.Icon(
+                            Icon(
                                 imageVector = screen.icon,
                                 contentDescription = stringResource(id = screen.titleRes)
                             )
@@ -74,23 +79,16 @@ fun MainAppScreen() {
         NavHost(
             navController = navController,
             startDestination = BottomBarScreen.Home.route,
-            modifier = Modifier.fillMaxSize()
+            // 중요: innerPadding을 넣어주어야 컨텐츠가 상하단 바에 가려지지 않아!
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(innerPadding)
         ) {
-            composable(BottomBarScreen.Home.route) {
-                HomeScreen()
-            }
-            composable(BottomBarScreen.Community.route) {
-                CommunityScreen()
-            }
-            composable(BottomBarScreen.Create.route) {
-                CreateScreen()
-            }
-            composable(BottomBarScreen.Notifications.route) {
-                NotificationsScreen()
-            }
-            composable(BottomBarScreen.Profile.route) {
-                ProfileScreen()
-            }
+            composable(BottomBarScreen.Home.route) { HomeScreen() }
+            composable(BottomBarScreen.Community.route) { CommunityScreen() }
+            composable(BottomBarScreen.Create.route) { CreateScreen() }
+            composable(BottomBarScreen.Notifications.route) { NotificationsScreen() }
+            composable(BottomBarScreen.Profile.route) { ProfileScreen() }
         }
     }
 }

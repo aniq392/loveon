@@ -7,7 +7,6 @@ import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
-
 import xyz.fsg123.loveon.R
 
 sealed class BottomBarScreen(
@@ -22,10 +21,12 @@ sealed class BottomBarScreen(
     object Profile : BottomBarScreen("profile", R.string.profile, Icons.Filled.Person)
 
     companion object {
-        val items = listOf(Home, Community, Create, Notifications, Profile)
-
-        fun getTitleResForRoute(route: String): Int {
-            return items.firstOrNull { it.route == route }?.titleRes ?: R.string.app_name
+        val items by lazy {
+            listOf(Home, Community, Create, Notifications, Profile)
         }
+
+        fun getTitleResForRoute(route: String?): Int =
+            items.firstOrNull { it.route == route }?.titleRes
+                ?: R.string.app_name
     }
 }
