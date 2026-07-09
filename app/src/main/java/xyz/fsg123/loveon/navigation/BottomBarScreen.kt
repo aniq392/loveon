@@ -8,18 +8,24 @@ import androidx.compose.material.icons.filled.Notifications
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.ui.graphics.vector.ImageVector
 
+import xyz.fsg123.loveon.R
+
 sealed class BottomBarScreen(
     val route: String,
-    val title: String,
+    val titleRes: Int,
     val icon: ImageVector
 ) {
-    object Home : BottomBarScreen("home", "Home", Icons.Filled.Home)
-    object Community : BottomBarScreen("community", "Community", Icons.Filled.Group)
-    object Create : BottomBarScreen("create", "Create", Icons.Filled.Add)
-    object Notifications : BottomBarScreen("notifications", "Notifications", Icons.Filled.Notifications)
-    object Profile : BottomBarScreen("profile", "Profile", Icons.Filled.Person)
+    object Home : BottomBarScreen("home", R.string.home, Icons.Filled.Home)
+    object Community : BottomBarScreen("community", R.string.community, Icons.Filled.Group)
+    object Create : BottomBarScreen("create", R.string.create, Icons.Filled.Add)
+    object Notifications : BottomBarScreen("notifications", R.string.notifications, Icons.Filled.Notifications)
+    object Profile : BottomBarScreen("profile", R.string.profile, Icons.Filled.Person)
 
     companion object {
         val items = listOf(Home, Community, Create, Notifications, Profile)
+
+        fun getTitleResForRoute(route: String): Int {
+            return items.firstOrNull { it.route == route }?.titleRes ?: R.string.app_name
+        }
     }
 }

@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">LoveOn</string>
+    <string name="home">Trang chủ</string>
+    <string name="community">Cộng đồng</string>
+    <string name="create">Tạo</string>
+    <string name="notifications">Thông báo</string>
+    <string name="profile">Hồ sơ</string>
+    <string name="splash_text">Đây là màn hình chờ. Chuyển đến đăng nhập sau 2 giây.</string>
+    <string name="login_text">Đây là màn hình đăng nhập. Nhấn để tiếp tục.</string>
+    <string name="go_to_main_app">Đi đến ứng dụng chính</string>
+</resources>

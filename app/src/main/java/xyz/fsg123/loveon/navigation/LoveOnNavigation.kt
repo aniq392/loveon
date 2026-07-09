@@ -9,6 +9,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.compose.NavHost
@@ -55,7 +56,7 @@ fun TempSplashScreen(onNavigateToLogin: () -> Unit) {
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = "This is the splash screen. Navigate to login in 2 seconds.",
+            text = stringResource(id = R.string.splash_text),
             fontSize = 18.sp
         )
     }
@@ -71,7 +72,7 @@ fun TempLoginScreen(onLoginSuccess: () -> Unit) {
             onClick = onLoginSuccess,
             modifier = Modifier.padding(16.dp)
         ) {
-            Text(text = "Go to Main App")
+            Text(text = stringResource(id = R.string.go_to_main_app))
         }
     }
 }
