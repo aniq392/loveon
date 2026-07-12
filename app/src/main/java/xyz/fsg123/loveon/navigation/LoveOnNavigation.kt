@@ -99,7 +99,12 @@ fun LoveOnNavigation(authStateManager: AuthStateManager) {
         }
 
         composable("main_app") {
-            MainAppScreen()
+            MainAppScreen(onLogout = {
+                authStateManager.logout()
+                navController.navigate("login") {
+                    popUpTo("main_app") { inclusive = true }
+                }
+            })
         }
     }
 }

@@ -11,9 +11,12 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.LoveOn">
+
+        <!-- 1. 카카오 앱 키 설정 (실제 네이티브 앱 키 입력) -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
-            android:value="YOUR_KAKAO_NATIVE_APP_KEY" />
+            android:value="25c2aa0be664ddb3d7c4f966ba38db69" />
+
         <activity
             android:name=".MainActivity"
             android:exported="true"
@@ -21,10 +24,25 @@
             android:theme="@style/Theme.LoveOn">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-    </application>
 
+        <!-- 2. ★ 카카오톡 로그인 리다이렉트를 위한 필수 액티비티 추가 ★ -->
+        <activity
+            android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- ⚠️ 카카오톡 로그인 규칙: kakao 뒤에 공백 없이 실제 네이티브 앱 키를 붙입니다. -->
+                <!-- 예: 네이티브 키가 12345라면 android:scheme="kakao12345" -->
+                <data android:host="oauth"
+                    android:scheme="kakao25c2aa0be664ddb3d7c4f966ba38db69" />
+            </intent-filter>
+        </activity>
+
+    </application>
 </manifest>

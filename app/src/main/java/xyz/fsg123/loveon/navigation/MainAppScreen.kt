@@ -28,7 +28,7 @@ import xyz.fsg123.loveon.feature.profile.ProfileScreen
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainAppScreen() {
+fun MainAppScreen(onLogout: () -> Unit) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -88,7 +88,7 @@ fun MainAppScreen() {
             composable(BottomBarScreen.Community.route) { CommunityScreen() }
             composable(BottomBarScreen.Create.route) { CreateScreen() }
             composable(BottomBarScreen.Notifications.route) { NotificationsScreen() }
-            composable(BottomBarScreen.Profile.route) { ProfileScreen() }
+            composable(BottomBarScreen.Profile.route) { ProfileScreen(onLogout = onLogout) }
         }
     }
 }
