@@ -85,7 +85,7 @@ dependencies {
     implementation("com.google.dagger:hilt-android:2.51.1")
 
     implementation("com.google.android.gms:play-services-auth:21.2.0")
-    implementation("com.kakao.sdk:v2-user:2.20.3")
+    implementation("com.kakao.sdk:v2-user:2.24.0")
     implementation("com.navercorp.nid:oauth:5.10.0")
     implementation(platform("com.google.firebase:firebase-bom:34.15.0"))
     implementation("com.google.firebase:firebase-analytics")
