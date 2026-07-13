@@ -4,8 +4,14 @@
 
     <!-- 인터넷 권한 추가 -->
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <queries>
+        <package android:name="com.kakao.talk" />
+    </queries>
 
     <application
+
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -44,6 +50,7 @@
                 <!-- host에 "oauth"를, scheme에 "kakao{네이티브_앱_키}"를 입력합니다 -->
                 <!-- 예: 네이티브 앱키가 12345라면 kakao12345 -->
                 <data android:host="oauth" android:scheme="kakaoffc781610bbb3fe10e166b87748a2802" />
+
             </intent-filter>
         </activity>
 

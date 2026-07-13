@@ -29,6 +29,12 @@ class SocialLoginManager(
     private val KAKAO_TAG = "KakaoLogin"
     private val NAVER_TAG = "NAVER"
 
+    private val kakaoAppKey: String
+        get() = BuildConfig.KAKAO_NATIVE_APP_KEY
+            .trim()
+            .removePrefix("kakao")
+            .removePrefix("KAKAO")
+
     init {
         initializeGoogleClient()
         initializeKakaoSdk()
@@ -43,15 +49,13 @@ class SocialLoginManager(
     }
 
     private fun initializeKakaoSdk() {
-        if (BuildConfig.KAKAO_NATIVE_APP_KEY.isBlank() ||
-            BuildConfig.KAKAO_NATIVE_APP_KEY.contains("YOUR")
-        ) {
+        if (kakaoAppKey.isBlank() || kakaoAppKey.contains("YOUR")) {
             return
         }
 
         KakaoSdk.init(
             activity.applicationContext,
-            BuildConfig.KAKAO_NATIVE_APP_KEY
+            kakaoAppKey
         )
     }
 
@@ -88,36 +92,47 @@ class SocialLoginManager(
     } // 👈 닫는 괄호가 누락되었던 부분 수정
 
     fun startKakaoLogin() {
-        if (BuildConfig.KAKAO_NATIVE_APP_KEY.isBlank() || BuildConfig.KAKAO_NATIVE_APP_KEY.contains("YOUR")) {
+        if (kakaoAppKey.isBlank() || kakaoAppKey.contains("YOUR")) {
             onError("카카오 앱 키를 먼저 설정해 주세요.")
+            Log.d(KAKAO_TAG, "카카오 앱 키가 비어 있습니다")
             return
         }
 
-        val webLoginCallback: (OAuthToken?, Throwable?) -> Unit = fun(token, error) {
+        var webLoginCallback: ((OAuthToken?, Throwable?) -> Unit)? = null
+        webLoginCallback = callback@{ token, error ->
             if (error != null) {
                 if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                    return
+                    Log.d(KAKAO_TAG, "카카오 로그인 취소됨")
+                    return@callback
+                }
+
+                if (error is ClientError && error.reason == ClientErrorCause.NotSupported) {
+                    Log.d(KAKAO_TAG, "카카오톡 로그인 미지원, 계정 로그인으로 전환합니다")
+                    UserApiClient.instance.loginWithKakaoAccount(activity, callback = webLoginCallback!!)
+                    return@callback
+                }
+
+                Log.e(KAKAO_TAG, "카카오 로그인 실패", error)
+                Log.e(KAKAO_TAG, "카카오 에러 타입: ${error::class.java.simpleName}")
+                if (error is ClientError) {
+                    Log.e(KAKAO_TAG, "카카오 ClientError reason: ${error.reason}")
                 }
                 onError(error.message ?: "카카오 로그인 실패")
             } else if (token != null) {
+                Log.d(KAKAO_TAG, "카카오 로그인 성공")
+                Log.d(KAKAO_TAG, "카카오 accessToken: ${token.accessToken}")
+                Log.d(KAKAO_TAG, "카카오 refreshToken: ${token.refreshToken}")
+                Log.d(KAKAO_TAG, "카카오 expiresAt: ${token.accessTokenExpiresAt}")
                 fetchKakaoUserInfo()
                 onSuccess("kakao")
             }
         }
 
         if (UserApiClient.instance.isKakaoTalkLoginAvailable(activity)) {
-            UserApiClient.instance.loginWithKakaoTalk(activity) { token, error ->
-                if (error != null) {
-                    if (error is ClientError && error.reason == ClientErrorCause.Cancelled) {
-                        return@loginWithKakaoTalk
-                    }
-                    UserApiClient.instance.loginWithKakaoAccount(activity, callback = webLoginCallback)
-                } else if (token != null) {
-                    fetchKakaoUserInfo()
-                    onSuccess("kakao")
-                }
-            }
+            Log.d(KAKAO_TAG, "카카오톡 설치됨")
+            UserApiClient.instance.loginWithKakaoTalk(activity, callback = webLoginCallback)
         } else {
+            Log.d(KAKAO_TAG, "카카오톡 미설치, 계정 로그인으로 진행합니다")
             UserApiClient.instance.loginWithKakaoAccount(activity, callback = webLoginCallback)
         }
     }
