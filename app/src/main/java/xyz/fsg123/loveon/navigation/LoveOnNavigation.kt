@@ -19,12 +19,19 @@ import xyz.fsg123.loveon.R
 import xyz.fsg123.loveon.auth.AuthStateManager
 import xyz.fsg123.loveon.auth.SocialLoginManager
 import androidx.activity.compose.LocalActivity
+import xyz.fsg123.loveon.ui.theme.ThemeMode
+import xyz.fsg123.loveon.ui.theme.ThemePreferences
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.ComponentActivity
 
 @Composable
-fun LoveOnNavigation(authStateManager: AuthStateManager) {
+fun LoveOnNavigation(
+    authStateManager: AuthStateManager,
+    themePreferences: ThemePreferences,
+    currentThemeMode: ThemeMode,
+    onThemeModeChanged: (ThemeMode) -> Unit
+) {
     val navController = rememberNavController()
     val activity = LocalActivity.current
 
@@ -99,12 +106,17 @@ fun LoveOnNavigation(authStateManager: AuthStateManager) {
         }
 
         composable("main_app") {
-            MainAppScreen(onLogout = {
-                authStateManager.logout()
-                navController.navigate("login") {
-                    popUpTo("main_app") { inclusive = true }
-                }
-            })
+            MainAppScreen(
+                onLogout = {
+                    authStateManager.logout()
+                    navController.navigate("login") {
+                        popUpTo("main_app") { inclusive = true }
+                    }
+                },
+                themePreferences = themePreferences,
+                currentThemeMode = currentThemeMode,
+                onThemeModeChanged = onThemeModeChanged
+            )
         }
     }
 }

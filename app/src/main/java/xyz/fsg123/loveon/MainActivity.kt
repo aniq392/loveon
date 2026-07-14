@@ -8,11 +8,17 @@ import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import java.security.MessageDigest
 import xyz.fsg123.loveon.auth.AuthStateManager
 import xyz.fsg123.loveon.auth.SharedPreferencesAuthStateStore
 import xyz.fsg123.loveon.navigation.LoveOnNavigation
 import xyz.fsg123.loveon.ui.theme.LoveOnTheme
+import xyz.fsg123.loveon.ui.theme.ThemeMode
+import xyz.fsg123.loveon.ui.theme.ThemePreferences
 
 class MainActivity : ComponentActivity() {
 
@@ -27,12 +33,23 @@ class MainActivity : ComponentActivity() {
                 getSharedPreferences("loveon_auth", Context.MODE_PRIVATE)
             )
         )
+        val themePreferences = ThemePreferences(getSharedPreferences("loveon_theme", Context.MODE_PRIVATE))
 
         enableEdgeToEdge()
 
         setContent {
-            LoveOnTheme {
-                LoveOnNavigation(authStateManager)
+            var currentThemeMode by remember { mutableStateOf(themePreferences.getThemeMode()) }
+
+            LoveOnTheme(themeMode = currentThemeMode) {
+                LoveOnNavigation(
+                    authStateManager = authStateManager,
+                    themePreferences = themePreferences,
+                    currentThemeMode = currentThemeMode,
+                    onThemeModeChanged = { newThemeMode ->
+                        themePreferences.setThemeMode(newThemeMode)
+                        currentThemeMode = newThemeMode
+                    }
+                )
             }
         }
     }

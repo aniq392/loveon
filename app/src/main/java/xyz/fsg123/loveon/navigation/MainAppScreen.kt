@@ -25,10 +25,17 @@ import xyz.fsg123.loveon.feature.create.CreateScreen
 import xyz.fsg123.loveon.feature.home.HomeScreen
 import xyz.fsg123.loveon.feature.notifications.NotificationsScreen
 import xyz.fsg123.loveon.feature.profile.ProfileScreen
+import xyz.fsg123.loveon.ui.theme.ThemeMode
+import xyz.fsg123.loveon.ui.theme.ThemePreferences
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MainAppScreen(onLogout: () -> Unit) {
+fun MainAppScreen(
+    onLogout: () -> Unit,
+    themePreferences: ThemePreferences,
+    currentThemeMode: ThemeMode,
+    onThemeModeChanged: (ThemeMode) -> Unit
+) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
@@ -88,7 +95,14 @@ fun MainAppScreen(onLogout: () -> Unit) {
             composable(BottomBarScreen.Community.route) { CommunityScreen() }
             composable(BottomBarScreen.Create.route) { CreateScreen() }
             composable(BottomBarScreen.Notifications.route) { NotificationsScreen() }
-            composable(BottomBarScreen.Profile.route) { ProfileScreen(onLogout = onLogout) }
+            composable(BottomBarScreen.Profile.route) {
+                ProfileScreen(
+                    onLogout = onLogout,
+                    themePreferences = themePreferences,
+                    currentThemeMode = currentThemeMode,
+                    onThemeModeChanged = onThemeModeChanged
+                )
+            }
         }
     }
 }
