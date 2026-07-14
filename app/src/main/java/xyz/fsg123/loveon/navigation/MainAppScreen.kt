@@ -25,6 +25,8 @@ import xyz.fsg123.loveon.feature.create.CreateScreen
 import xyz.fsg123.loveon.feature.home.HomeScreen
 import xyz.fsg123.loveon.feature.notifications.NotificationsScreen
 import xyz.fsg123.loveon.feature.profile.ProfileScreen
+import xyz.fsg123.loveon.ui.language.AppLanguage
+import xyz.fsg123.loveon.ui.language.LanguagePreferences
 import xyz.fsg123.loveon.ui.theme.ThemeMode
 import xyz.fsg123.loveon.ui.theme.ThemePreferences
 
@@ -34,7 +36,10 @@ fun MainAppScreen(
     onLogout: () -> Unit,
     themePreferences: ThemePreferences,
     currentThemeMode: ThemeMode,
-    onThemeModeChanged: (ThemeMode) -> Unit
+    onThemeModeChanged: (ThemeMode) -> Unit,
+    languagePreferences: LanguagePreferences,
+    currentLanguage: AppLanguage,
+    onLanguageChanged: (AppLanguage) -> Unit
 ) {
     val navController = rememberNavController()
     val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -100,7 +105,10 @@ fun MainAppScreen(
                     onLogout = onLogout,
                     themePreferences = themePreferences,
                     currentThemeMode = currentThemeMode,
-                    onThemeModeChanged = onThemeModeChanged
+                    onThemeModeChanged = onThemeModeChanged,
+                    languagePreferences = languagePreferences,
+                    currentLanguage = currentLanguage,
+                    onLanguageChanged = onLanguageChanged
                 )
             }
         }

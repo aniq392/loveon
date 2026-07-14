@@ -19,6 +19,8 @@ import xyz.fsg123.loveon.R
 import xyz.fsg123.loveon.auth.AuthStateManager
 import xyz.fsg123.loveon.auth.SocialLoginManager
 import androidx.activity.compose.LocalActivity
+import xyz.fsg123.loveon.ui.language.AppLanguage
+import xyz.fsg123.loveon.ui.language.LanguagePreferences
 import xyz.fsg123.loveon.ui.theme.ThemeMode
 import xyz.fsg123.loveon.ui.theme.ThemePreferences
 import androidx.activity.compose.rememberLauncherForActivityResult
@@ -30,7 +32,10 @@ fun LoveOnNavigation(
     authStateManager: AuthStateManager,
     themePreferences: ThemePreferences,
     currentThemeMode: ThemeMode,
-    onThemeModeChanged: (ThemeMode) -> Unit
+    onThemeModeChanged: (ThemeMode) -> Unit,
+    languagePreferences: LanguagePreferences,
+    currentLanguage: AppLanguage,
+    onLanguageChanged: (AppLanguage) -> Unit
 ) {
     val navController = rememberNavController()
     val activity = LocalActivity.current
@@ -115,7 +120,10 @@ fun LoveOnNavigation(
                 },
                 themePreferences = themePreferences,
                 currentThemeMode = currentThemeMode,
-                onThemeModeChanged = onThemeModeChanged
+                onThemeModeChanged = onThemeModeChanged,
+                languagePreferences = languagePreferences,
+                currentLanguage = currentLanguage,
+                onLanguageChanged = onLanguageChanged
             )
         }
     }

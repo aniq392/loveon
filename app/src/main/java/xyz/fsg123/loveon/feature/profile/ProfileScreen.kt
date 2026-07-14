@@ -16,6 +16,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import xyz.fsg123.loveon.ui.language.AppLanguage
+import xyz.fsg123.loveon.ui.language.LanguagePreferences
 import xyz.fsg123.loveon.ui.theme.ThemeMode
 import xyz.fsg123.loveon.ui.theme.ThemePreferences
 
@@ -24,7 +26,10 @@ fun ProfileScreen(
     onLogout: () -> Unit = {},
     themePreferences: ThemePreferences,
     currentThemeMode: ThemeMode,
-    onThemeModeChanged: (ThemeMode) -> Unit
+    onThemeModeChanged: (ThemeMode) -> Unit,
+    languagePreferences: LanguagePreferences,
+    currentLanguage: AppLanguage,
+    onLanguageChanged: (AppLanguage) -> Unit
 ) {
     Box(
         modifier = Modifier.fillMaxSize(),
@@ -67,6 +72,34 @@ fun ProfileScreen(
                 onThemeModeChanged(ThemeMode.DARK)
             }) {
                 Text(text = "다크 모드")
+            }
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            Text(
+                text = "언어 설정",
+                fontSize = 16.sp,
+                color = MaterialTheme.colorScheme.onBackground
+            )
+
+            Spacer(modifier = Modifier.height(8.dp))
+
+            OutlinedButton(onClick = {
+                onLanguageChanged(AppLanguage.SYSTEM)
+            }) {
+                Text(text = "시스템 언어")
+            }
+
+            OutlinedButton(onClick = {
+                onLanguageChanged(AppLanguage.KOREAN)
+            }) {
+                Text(text = "한글")
+            }
+
+            OutlinedButton(onClick = {
+                onLanguageChanged(AppLanguage.ENGLISH)
+            }) {
+                Text(text = "English")
             }
 
             Spacer(modifier = Modifier.height(24.dp))
