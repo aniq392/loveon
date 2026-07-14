@@ -11,7 +11,6 @@
     </queries>
 
     <application
-
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,26 +18,37 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/Theme.LoveOn"
-        android:enableOnBackInvokedCallback="true">
+        android:enableOnBackInvokedCallback="true"
+        android:localeConfig="@xml/locales_config"
+        android:theme="@style/Theme.AppCompat.NoActionBar"> <!-- 테마는 AppCompat 계열로 단일 지정 -->
 
         <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label="@string/app_name"
-            android:theme="@style/Theme.LoveOn">
+            android:theme="@style/Theme.AppCompat.NoActionBar"> <!-- 테마 중복을 제거하고 단일 지정 -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-        <!-- 1. 카카오 앱 키 설정 (실제 네이티브 앱 키 입력) -->
+        <!-- ★ 다국어 설정 유지 및 자동 저장을 위한 서비스 추가 ★ -->
+        <service
+            android:name="androidx.appcompat.app.AppLocalesMetadataHolderService"
+            android:enabled="false"
+            android:exported="false">
+            <meta-data
+                android:name="autoStoreLocales"
+                android:value="true" />
+        </service>
+
+        <!-- 1. 카카오 앱 키 설정 -->
         <meta-data
             android:name="com.kakao.sdk.AppKey"
             android:value="ffc781610bbb3fe10e166b87748a2802" />
-        <!-- 2. ★ 카카오톡 로그인 리다이렉트를 위한 필수 액티비티 추가 ★ -->
-        <!-- 카카오 로그인 redirect URI 설정 -->
+
+        <!-- 2. 카카오톡 로그인 리다이렉트를 위한 필수 액티비티 추가 -->
         <activity
             android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity"
             android:exported="true">
@@ -48,9 +58,7 @@
                 <category android:name="android.intent.category.BROWSABLE" />
 
                 <!-- host에 "oauth"를, scheme에 "kakao{네이티브_앱_키}"를 입력합니다 -->
-                <!-- 예: 네이티브 앱키가 12345라면 kakao12345 -->
                 <data android:host="oauth" android:scheme="kakaoffc781610bbb3fe10e166b87748a2802" />
-
             </intent-filter>
         </activity>
 

@@ -4,7 +4,7 @@
     <selectionStates>
       <SelectionState runConfigName="LoveOn">
         <option name="selectionMode" value="DROPDOWN" />
-        <DropdownSelection timestamp="2026-07-09T05:17:35.424602Z">
+        <DropdownSelection timestamp="2026-07-14T08:32:18.917134Z">
           <Target type="DEFAULT_BOOT">
             <handle>
               <DeviceId pluginId="PhysicalDevice" identifier="serial=R3CN60G20SA" />

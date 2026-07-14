@@ -91,5 +91,5 @@ dependencies {
     implementation("com.navercorp.nid:oauth:5.10.0")
     implementation(platform("com.google.firebase:firebase-bom:34.15.0"))
     implementation("com.google.firebase:firebase-analytics")
-
+    implementation("androidx.appcompat:appcompat:1.6.1") // 혹은 최신 버전
 }
