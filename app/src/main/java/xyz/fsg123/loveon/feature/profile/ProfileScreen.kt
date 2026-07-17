@@ -20,10 +20,13 @@ import xyz.fsg123.loveon.ui.language.AppLanguage
 import xyz.fsg123.loveon.ui.language.LanguagePreferences
 import xyz.fsg123.loveon.ui.theme.ThemeMode
 import xyz.fsg123.loveon.ui.theme.ThemePreferences
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 
 @Composable
 fun ProfileScreen(
     onLogout: () -> Unit = {},
+    onLiveStream: () -> Unit = {},      // 추가
     themePreferences: ThemePreferences,
     currentThemeMode: ThemeMode,
     onThemeModeChanged: (ThemeMode) -> Unit,
@@ -37,7 +40,10 @@ fun ProfileScreen(
     ) {
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(16.dp)
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(16.dp)
         ) {
             Text(
                 text = "This is your profile screen. Edit your info later.",
@@ -100,6 +106,15 @@ fun ProfileScreen(
                 onLanguageChanged(AppLanguage.ENGLISH)
             }) {
                 Text(text = "English")
+            }
+
+
+            Spacer(modifier = Modifier.height(24.dp))
+
+            Button(
+                onClick = onLiveStream
+            ) {
+                Text(text = "실시간 방송 보기")
             }
 
             Spacer(modifier = Modifier.height(24.dp))

@@ -29,6 +29,11 @@ import xyz.fsg123.loveon.ui.language.AppLanguage
 import xyz.fsg123.loveon.ui.language.LanguagePreferences
 import xyz.fsg123.loveon.ui.theme.ThemeMode
 import xyz.fsg123.loveon.ui.theme.ThemePreferences
+import xyz.fsg123.loveon.feature.profile.LiveStreamWebView
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
+import androidx.compose.material3.IconButton
+
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -51,11 +56,28 @@ fun MainAppScreen(
             TopAppBar(
                 title = {
                     Text(
-                        text = stringResource(
-                            // 널 안전성을 위해 currentRoute가 null일 때 대처 추가
-                            id = BottomBarScreen.getTitleResForRoute(currentRoute)
-                        )
+                        text = if (currentRoute == "live") {
+                            "LoveOn"
+                        } else {
+                            stringResource(
+                                id = BottomBarScreen.getTitleResForRoute(currentRoute)
+                            )
+                        }
                     )
+                },
+                navigationIcon = {
+                    if (currentRoute == "live") {
+                        IconButton(
+                            onClick = {
+                                navController.popBackStack()
+                            }
+                        ) {
+                            Icon(
+                                imageVector = Icons.AutoMirrored.Filled.ArrowBack,
+                                contentDescription = "뒤로가기"
+                            )
+                        }
+                    }
                 }
             )
         },
@@ -103,12 +125,20 @@ fun MainAppScreen(
             composable(BottomBarScreen.Profile.route) {
                 ProfileScreen(
                     onLogout = onLogout,
+                    onLiveStream = {
+                        navController.navigate("live")
+                    },
                     themePreferences = themePreferences,
                     currentThemeMode = currentThemeMode,
                     onThemeModeChanged = onThemeModeChanged,
                     languagePreferences = languagePreferences,
                     currentLanguage = currentLanguage,
                     onLanguageChanged = onLanguageChanged
+                )
+            }
+            composable("live") {
+                LiveStreamWebView(
+                    modifier = Modifier.fillMaxSize()
                 )
             }
         }
