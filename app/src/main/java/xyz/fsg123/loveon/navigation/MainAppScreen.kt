@@ -1,9 +1,12 @@
+// navigation/MainAppScreen.kt
 package xyz.fsg123.loveon.navigation
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding // 패딩 추가
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
@@ -11,33 +14,34 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.navigation.NavDestination.Companion.hierarchy // hierarchy 추가
+import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import xyz.fsg123.loveon.R
+import xyz.fsg123.loveon.auth.AuthStateManager
 import xyz.fsg123.loveon.feature.community.CommunityScreen
 import xyz.fsg123.loveon.feature.create.CreateScreen
 import xyz.fsg123.loveon.feature.home.HomeScreen
 import xyz.fsg123.loveon.feature.notifications.NotificationsScreen
+import xyz.fsg123.loveon.feature.profile.LiveStreamWebView
 import xyz.fsg123.loveon.feature.profile.ProfileScreen
 import xyz.fsg123.loveon.ui.language.AppLanguage
 import xyz.fsg123.loveon.ui.language.LanguagePreferences
 import xyz.fsg123.loveon.ui.theme.ThemeMode
 import xyz.fsg123.loveon.ui.theme.ThemePreferences
-import xyz.fsg123.loveon.feature.profile.LiveStreamWebView
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
-import androidx.compose.material3.IconButton
-
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun MainAppScreen(
+    authStateManager: AuthStateManager,
     onLogout: () -> Unit,
     themePreferences: ThemePreferences,
     currentThemeMode: ThemeMode,
@@ -50,6 +54,14 @@ fun MainAppScreen(
     val navBackStackEntry by navController.currentBackStackEntryAsState()
     val currentDestination = navBackStackEntry?.destination
     val currentRoute = currentDestination?.route
+
+    // 블랙리스트면 Create 버튼 숨김
+    val isBlacklisted = authStateManager.isBlacklisted.value
+    val bottomBarItems = if (isBlacklisted) {
+        BottomBarScreen.items.filter { it.route != BottomBarScreen.Create.route }
+    } else {
+        BottomBarScreen.items
+    }
 
     Scaffold(
         topBar = {
@@ -83,8 +95,7 @@ fun MainAppScreen(
         },
         bottomBar = {
             NavigationBar {
-                // 이전 답변대로 BottomBarScreen에 'by lazy'를 적용했다면 호출 시점에 안전하게 가져옴
-                BottomBarScreen.items.forEach { screen ->
+                bottomBarItems.forEach { screen ->
                     val isSelected = currentDestination?.hierarchy?.any { it.route == screen.route } == true
 
                     NavigationBarItem(
@@ -113,17 +124,30 @@ fun MainAppScreen(
         NavHost(
             navController = navController,
             startDestination = BottomBarScreen.Home.route,
-            // 중요: innerPadding을 넣어주어야 컨텐츠가 상하단 바에 가려지지 않아!
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
             composable(BottomBarScreen.Home.route) { HomeScreen() }
             composable(BottomBarScreen.Community.route) { CommunityScreen() }
-            composable(BottomBarScreen.Create.route) { CreateScreen() }
+
+            composable(BottomBarScreen.Create.route) {
+                if (authStateManager.hasWritePermission()) {
+                    CreateScreen()
+                } else {
+                    Box(
+                        modifier = Modifier.fillMaxSize(),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text("쓰기 권한이 없습니다.")
+                    }
+                }
+            }
+
             composable(BottomBarScreen.Notifications.route) { NotificationsScreen() }
             composable(BottomBarScreen.Profile.route) {
                 ProfileScreen(
+                    authStateManager = authStateManager,
                     onLogout = onLogout,
                     onLiveStream = {
                         navController.navigate("live")
